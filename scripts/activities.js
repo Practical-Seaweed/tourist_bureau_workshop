@@ -116,6 +116,33 @@ window.onload = function () {
     let categorySelect = document.querySelector("#categoriesSelect");
     categorySelect.addEventListener("change", updateActivitiesDropdown);
 
+    activitiesForm.addEventListener("submit", displayActivityInfo)
+
+
+}
+
+function displayActivityInfo () {
+
+    let userActivityBox = document.querySelector("#activitiesSelect");
+
+    let resultsDiv = document.querySelector("#displayActivityInfo");
+
+    let selectedIndex = userActivityBox.selectedIndex
+
+    if (userActivityBox.value === "") {
+        resultsDiv.innerHTML = "";
+    }else {
+        let selectedUser = activities[selectedIndex - 1];
+    
+        resultsDiv.innerHTML = `
+        <div>Category: ${selectedUser.category}</div>
+        <div>Id: ${selectedUser.id}</div>
+        <div>Name: ${selectedUser.name}</div>
+        <div>Description: ${selectedUser.description}</div>
+        <div>Location: ${selectedUser.location}</div>
+        <div>Price: $${selectedUser.price}</div>
+        `
+    }
 }
 
 function displayActivities(event) {
@@ -145,7 +172,7 @@ function displayCategories(event) {
     //get the index of the selected option in the dropdown
     let selectedIndex = theDropdown.selectedIndex;
 
- 
+
     if (selectedIndex === 0) {
         paragraphResults.innerHTML = "";
     } else {
