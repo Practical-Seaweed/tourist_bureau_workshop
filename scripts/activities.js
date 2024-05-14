@@ -108,13 +108,30 @@ window.onload = function () {
 
     //grab our button off the page using document.querySelector
     let theForm = document.querySelector("#categoriesForm");
-
-    //when our button is clicked call displayFootballTeam
     theForm.addEventListener("submit", displayCategories);
+
+    let activitiesForm = document.querySelector("#activitiesForm");
+    activitiesForm.addEventListener("submit", displayActivities);
 
 }
 
-//this function will display the details about our football team
+function displayActivities (event) {
+
+    event.preventDefault();
+
+    let activityDropdown = document.querySelector("#activitiesSelect");
+    let activityPResults = document.querySelector("#activityResults");
+    let selectedIndex = activityDropdown.selectedIndex - 1;
+
+    if (activityDropdown.value === "") {
+        activityPResults.innerHTML = ""
+    }else {
+        let selectedActivities = activities[i].name;
+
+        activityPResults.innerHTML = `You selected the ${selectedActivities} activity!`
+    }
+}
+
 function displayCategories(event) {
 
     //keep the form from reloading the page
@@ -130,7 +147,7 @@ function displayCategories(event) {
     let selectedIndex = theDropdown.selectedIndex - 1;
 
 
-    //if the defualt option was selected then the value will be ""
+    //if the default option was selected then the value will be ""
     //if it's an empty string clear the team info
     //otherwise display the team
     if (theDropdown.value === "") {
@@ -148,26 +165,42 @@ function displayCategories(event) {
 
 }
 
-//this function builds the options for the dropdwon from our array of objects (teams)
+//this function builds the options for the dropdown from our array of objects (teams)
 function initDropdown() {
 
     //get the dropdown from the HTML document and assign it to a variable
     let theDropdown = document.querySelector("#categoriesSelect");
+    let activityDropdown = document.querySelector("#activitiesSelect");
 
-    //create an HTML option element to serve as the defualt option for our team select
+    //create an HTML option element to serve as the default option for our team select
     let defaultOption = document.createElement("option");
+    let activityDefaultOption = document.createElement("option");
 
     //set the textContent of the option to be "Select a Team"
-    defaultOption.textContent = "Select an Activity";
+    defaultOption.textContent = "Select an Category";
+    activityDefaultOption.textContent = "Select a Activity"
 
     //set the value of the option to an empty string ("")
     defaultOption.value = "";
+    activityDefaultOption.value = "";
 
     //add this default option to the select
     theDropdown.appendChild(defaultOption);
+    activityDropdown.appendChild(activityDefaultOption);
 
     //get the total number of teams we have for use in the loop
     let numberOfCategories = categories.length;
+    let numberOfActivities = activities.length;
+
+    for (let i = 0; i < numberOfActivities; i++){
+
+        let newActivityOption = document.createElement("option");
+
+        newActivityOption.textContent = activities[i].name;
+        newActivityOption.value = activities[i].name;
+
+        activityDropdown.appendChild(newActivityOption);
+    }
 
     //lets start looping over the teams
     for (let i = 0; i < numberOfCategories; i++) {
