@@ -46,7 +46,7 @@ let activities = [
     {
         category: "Museums",
         id: "M101",
-        name: "Bravings Airship Museum",
+        name: "Braving's Airship Museum",
         description: "Enjoy climbing on and in our collection of small airplanes.  You will find bi-planes, experimental planes and small jets.",
         location: "101 Airfield Drive",
         price: 10.00
@@ -113,27 +113,26 @@ window.onload = function () {
     let activitiesForm = document.querySelector("#activitiesForm");
     activitiesForm.addEventListener("submit", displayActivities);
 
+    let categorySelect = document.querySelector("#categoriesSelect");
+    categorySelect.addEventListener("change", updateActivitiesDropdown);
+
 }
 
-function displayActivities (event) {
-
+function displayActivities(event) {
     event.preventDefault();
 
     let activityDropdown = document.querySelector("#activitiesSelect");
     let activityPResults = document.querySelector("#activityResults");
-    let selectedIndex = activityDropdown.selectedIndex - 1;
 
     if (activityDropdown.value === "") {
         activityPResults.innerHTML = ""
-    }else {
-        let selectedActivities = activities[i].name;
-
+    } else {
+        let selectedActivities = activityDropdown.value;
         activityPResults.innerHTML = `You selected the ${selectedActivities} activity!`
     }
 }
 
 function displayCategories(event) {
-
     //keep the form from reloading the page
     event.preventDefault();
 
@@ -144,41 +143,30 @@ function displayCategories(event) {
     let paragraphResults = document.querySelector("#results");
 
     //get the index of the selected option in the dropdown
-    let selectedIndex = theDropdown.selectedIndex - 1;
+    let selectedIndex = theDropdown.selectedIndex;
 
-
-    //if the default option was selected then the value will be ""
-    //if it's an empty string clear the team info
-    //otherwise display the team
-    if (theDropdown.value === "") {
+ 
+    if (selectedIndex === 0) {
         paragraphResults.innerHTML = "";
     } else {
+        //get the category out of the categories array based on the index from the dropdown
+        let selectedCategory = categories[selectedIndex - 1];
 
-        //get the team out of the teams array based on the index from the dropdown
-        let selectedCategories = categories[selectedIndex];
-
-        //put the info about the selected team in our paragraph
-        paragraphResults.innerHTML = `You selected the ${selectedCategories} category!`
+        //put the info about the selected category in our paragraph
+        paragraphResults.innerHTML = `You selected the ${selectedCategory} category!`;
     }
-
-
-
 }
 
-//this function builds the options for the dropdown from our array of objects (teams)
 function initDropdown() {
-
     //get the dropdown from the HTML document and assign it to a variable
     let theDropdown = document.querySelector("#categoriesSelect");
     let activityDropdown = document.querySelector("#activitiesSelect");
 
-    //create an HTML option element to serve as the default option for our team select
     let defaultOption = document.createElement("option");
     let activityDefaultOption = document.createElement("option");
 
-    //set the textContent of the option to be "Select a Team"
     defaultOption.textContent = "Select an Category";
-    activityDefaultOption.textContent = "Select a Activity"
+    activityDefaultOption.textContent = "Select an Activity"
 
     //set the value of the option to an empty string ("")
     defaultOption.value = "";
@@ -192,19 +180,15 @@ function initDropdown() {
     let numberOfCategories = categories.length;
     let numberOfActivities = activities.length;
 
-    for (let i = 0; i < numberOfActivities; i++){
-
+    for (let i = 0; i < numberOfActivities; i++) {
         let newActivityOption = document.createElement("option");
-
         newActivityOption.textContent = activities[i].name;
         newActivityOption.value = activities[i].name;
-
         activityDropdown.appendChild(newActivityOption);
     }
 
-    //lets start looping over the teams
+    //lets start looping over the categories
     for (let i = 0; i < numberOfCategories; i++) {
-
         //lets create a new option using document.createElement
         let newOption = document.createElement("option");
 
@@ -216,7 +200,33 @@ function initDropdown() {
 
         //add this option to the dropdown using appendChild
         theDropdown.appendChild(newOption);
-
     }
+}
 
+// this functions should be triggered when a user selects a category
+function updateActivitiesDropdown(event) {
+
+    // this gets us the value of the selected category
+    let categorySelect = event.target;
+    let selectedCategory = categorySelect.value;
+
+    // this is our select from HTML
+    let activityDropdown = document.querySelector("#activitiesSelect");
+
+    activityDropdown.innerHTML = "";
+
+    let defaultOption = document.createElement("option");
+    defaultOption.textContent = "Select an Activity";
+    defaultOption.value = "";
+    activityDropdown.appendChild(defaultOption);
+
+    // this will loop
+    activities.forEach(activity => {
+        if (activity.category === selectedCategory) {
+            let newOption = document.createElement("option");
+            newOption.textContent = activity.name;
+            newOption.value = activity.name;
+            activityDropdown.appendChild(newOption);
+        }
+    });
 }
